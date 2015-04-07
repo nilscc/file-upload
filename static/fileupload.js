@@ -187,80 +187,87 @@ var checksum = function (file, callback) {
 
 var upload = function (file, settings) /* success_callback, speed_callback, progress_callback) */ {
 
-  // build form data
-  var fd = new FormData();
-  fd.append("file", file);
+  checksum(file, function (md5) {
 
-  var success_cb  = settings.success,
-      speed_cb    = settings.speed,
-      progress_cb = settings.progress;
+    // build form data
+    var fd = new FormData();
+    fd.append("file", file);
+    fd.append("size", file.size);
+    fd.append("checksum", md5);
 
-  // start upload
-  currentupload = $.ajax({
+    var success_cb  = settings.success,
+        speed_cb    = settings.speed,
+        progress_cb = settings.progress;
 
-    // Add progress listener to XHR object
-    xhr: function () {
+    // start upload
+    currentupload = $.ajax({
 
-      // default XHR object
-      var xhrobj = $.ajaxSettings.xhr();
+      // Add progress listener to XHR object
+      xhr: function () {
 
-      if ((typeof speed_cb === "function" || typeof progress_cb === "function") && xhrobj.upload) {
+        // default XHR object
+        var xhrobj = $.ajaxSettings.xhr();
 
-        // closures for last checked file position, last checked time and last speed
-        var lst, lst_t, lst_speed = 0;
+        if ((typeof speed_cb === "function" || typeof progress_cb === "function") && xhrobj.upload) {
 
-        xhrobj.upload.addEventListener("progress", function (e) {
+          // closures for last checked file position, last checked time and last speed
+          var lst, lst_t, lst_speed = 0;
 
-          var pos = e.loaded || e.position,
-              tot = e.total;
+          xhrobj.upload.addEventListener("progress", function (e) {
 
-          // Call progress callback
-          if (e.lengthComputable && typeof progress_cb === "function") {
-            progress_cb(Math.ceil(pos / tot * 100));
-          }
+            var pos = e.loaded || e.position,
+                tot = e.total;
 
-          // Call speed callback
-          if (typeof speed_cb === "function" && pos != undefined && pos != tot) {
+            // Call progress callback
+            if (e.lengthComputable && typeof progress_cb === "function") {
+              progress_cb(Math.ceil(pos / tot * 100));
+            }
 
-            // difference in time
-            var t = new Date(),
-                d_t = t - lst_t;
+            // Call speed callback
+            if (typeof speed_cb === "function" && pos != undefined && pos != tot) {
 
-            // calculate speed from difference in position
-            var d_pos = pos - (lst != undefined ? lst : 0),
-                speed = d_t > 0 ? (d_pos / (d_t / 1000)) : 0;
+              // difference in time
+              var t = new Date(),
+                  d_t = t - lst_t;
 
-            // build average over two time steps
-            speed_cb( (speed + lst_speed) / 2 );
+              // calculate speed from difference in position
+              var d_pos = pos - (lst != undefined ? lst : 0),
+                  speed = d_t > 0 ? (d_pos / (d_t / 1000)) : 0;
 
-            // replace old values
-            lst       = pos;
-            lst_t     = t;
-            lst_speed = speed;
-          }
-        }, false);
+              // build average over two time steps
+              speed_cb( (speed + lst_speed) / 2 );
+
+              // replace old values
+              lst       = pos;
+              lst_t     = t;
+              lst_speed = speed;
+            }
+          }, false);
+        }
+
+        return xhrobj;
+      },
+
+      // upload url & data
+      type: "POST",
+      url: "/upload/file",
+      data: fd,
+      contentType: false,
+      processData: false,
+
+      success: function (data) {
+
+        // clean up current upload
+        currentupload = undefined;
+
+        if (typeof success_cb === "function") {
+          success_cb(data);
+        }
       }
 
-      return xhrobj;
-    },
+    }); /* $.ajax */
 
-    // upload url & data
-    type: "POST",
-    url: "/upload/file",
-    data: fd,
-    contentType: false,
-    processData: false,
-
-    success: function (data) {
-
-      // clean up current upload
-      currentupload = undefined;
-
-      if (typeof success_callback === "function") {
-        success_callback(data);
-      }
-    }
-  });
+  }); /* checksum */
 }
 
 /*
