@@ -1,0 +1,51 @@
+body {
+  background-color: black;
+  color: rgba(255,255,255,0.3);
+  font-family: 'Martel Sans', sans-serif;
+}
+
+/* Disable text selection */
+.noselect,
+button {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  cursor: default;
+}
+
+.select {
+  -webkit-touch-callout: default;
+  -webkit-user-select: text;
+  -khtml-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+
+  cursor: text;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+button {
+  /* font-family: 'Martel Sans', sans-serif; */
+  font-size: 0.9em;
+  padding: 0.3em 0.6em;
+  background-color: rgba(255,255,255,0.1);
+  transition: background-color 0.2s;
+  color: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: rgba(255,255,255,0.15);
+  transition: background-color 0.2s;
+}

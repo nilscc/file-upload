@@ -1,0 +1,98 @@
+.fileupload {
+  margin: 5em auto;
+  padding: 5em 0 5em;
+  text-align: center;
+  max-width: 800px;
+  max-width: max(80%, 800px);
+  color: rgba(255,255,255,0.3);
+  border: 2pt dashed rgba(255,255,255,0.2);
+  transition: border-color 0.8s, color 0.8s;
+  border-radius: 10pt;
+}
+
+.fileupload h1,
+.fileupload p {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  cursor: default;
+
+  transition: color 0.4s;
+}
+
+.fileupload.dragging {
+  border-color: rgba(255,255,255,0.8);
+  transition: border-color 0.4s;
+}
+.fileupload.dragging h1,
+.fileupload.dragging p {
+  color: rgba(255,255,255,0.9);
+  transition: color 0.4s;
+}
+
+.fileupload .uploadlist {
+  max-width: 75%;
+  margin: 0 auto 0;
+  text-align: left;
+}
+
+.fileupload .uploadlist ul {
+  list-style: none;
+  padding: 0;
+}
+
+.fileupload .uploadlist li {
+  position: relative;
+}
+
+.fileupload .uploadlist li > * {
+  margin-right: 0.5em;
+}
+
+.fileupload .uploadlist .filename {
+  color: rgba(255,255,255,0.8);
+  padding: 0 0.5em 0;
+}
+.fileupload .uploadlist .filesize::before { content: "("; }
+.fileupload .uploadlist .filesize::after { content: ")"; }
+
+.fileupload .uploadlist .fa {
+  transition: color 0.4s;
+}
+.fileupload .uploadlist .upload:hover {
+  color: green;
+  transition: color 0.2s;
+}
+.fileupload .uploadlist .remove:hover {
+  color: rgba(255,80,80,0.8);
+  transition: color 0.2s;
+}
+
+.fileupload .uploadlist .uploading {
+  color: lightblue;
+}
+
+.fileupload .uploadlist .uploadspeed {
+  margin-left: 0.5em;
+}
+
+.fileupload .uploadlist .percent::before {
+  content: ", ";
+}
+.fileupload .uploadlist .filename {
+  position: relative;
+}
+.fileupload .uploadlist .filename .progress {
+  position: absolute;
+  top: -0.09em;
+  left: 0;
+  height: 100%;
+  background-color: rgba(0, 102, 153, 0.4);
+  border: 0;
+  border-radius: 2pt;
+  z-index: -1;
+}

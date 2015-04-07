@@ -1,0 +1,55 @@
+.filelist {
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+  max-width: 800px;
+  max-width: max(80%, 800px);
+  list-style: none;
+}
+
+.filelist > li {
+  text-align: left;
+}
+
+.filelist span {
+  padding: 0 0.5em;
+}
+
+.filelist .file-actions {
+  display: inline-block;
+}
+.filelist .file-actions .clickable {
+  margin-right: 0.5em;
+  transition: color 0.4s;
+}
+.filelist .file-actions .remove:hover {
+  color: rgba(255,80,80,0.8);
+  transition: color 0.2s;
+}
+.filelist .file-actions .clipboard {
+  font-size: 0.9em;
+}
+.filelist .file-actions .clipboard:hover {
+  color: rgba(255,204,102,0.8);
+  transition: color 0.2s;
+}
+
+.filelist .file-name {
+  color: rgba(255,255,255,0.5);
+  transition: color 0.2s;
+}
+.filelist .file-name:hover {
+  color: rgba(255,255,255,0.9);
+  transition: color 0.4s;
+}
+
+.filelist .file-size {
+  display: inline-block;
+  margin: 0 0.5em;
+}
+.filelist .file-size::before { content: "("; }
+.filelist .file-size::after  { content: ")"; }
+
+.filelist .file-created-at {
+  float: right;
+}

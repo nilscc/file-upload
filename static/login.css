@@ -1,0 +1,36 @@
+.login {
+  color: rgba(255,255,255,0.6);
+  text-align: center;
+  margin-top: 200px;
+}
+
+::selection {
+  background: rgba(255,255,255,0.4);
+}
+::-moz-selection {
+  background: rgba(255,255,255,0.3);
+}
+
+.login p {
+  padding: 0;
+  margin: 0.5em;
+}
+
+.login input {
+  color: rgba(255,255,255,0.3);
+  background-color: black;
+  border: 1px solid rgba(255,255,255,0.2);
+  outline: 0;
+  display: block;
+  margin: 0 auto 1em auto;
+  text-align: center;
+}
+
+.login input[type='text'] {
+  min-width: 40em;
+}
+
+.login input[type='submit'] {
+  opacity: 0;
+  transition: opacity 1s;
+}
