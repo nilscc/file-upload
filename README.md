@@ -17,3 +17,22 @@ The server backend is written in Haskell, using libraries like:
 * [happstack-server](https://hackage.haskell.org/package/happstack-server)
 * [acid-state](http://hackage.haskell.org/package/acid-state)
 * [blaze-html](http://hackage.haskell.org/package/blaze-html)
+
+GHC version 7.8.2 or higher is required.
+
+Installing
+---
+
+To build the server, first create a new cabal-sandbox (this step is optional,
+but recommended):
+
+```
+cabal sandbox init
+```
+
+Then install and run the binary:
+
+```
+cabal install
+./.cabal-sandbox/bin/file-upload-server
+```
