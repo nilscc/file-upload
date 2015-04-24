@@ -14,7 +14,7 @@ import qualified Acid.Sessions as Acid
 
 type UpMonad m =
   ( MonadState SystemRNG m
-  , MonadReader AcidStates m
+  , MonadReader States m
   , ServerMonad m
   , WebMonad Response m
   , FilterMonad Response m
@@ -24,7 +24,7 @@ type UpMonad m =
   , Functor m
   )
 
-data AcidStates = AcidStates
+data States = States
   { fileState    :: AcidState Acid.Files
   , sessionState :: AcidState Acid.Sessions
   }

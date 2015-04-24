@@ -3,10 +3,11 @@
 
 module Page.Index where
 
-import qualified Data.ByteString.Lazy as BL
-import qualified Data.ByteString.Base32 as Base32
 import Control.Monad
 import Control.Monad.Trans
+import qualified Data.ByteString.Lazy as BL
+import qualified Data.ByteString.Base32 as Base32
+import qualified Data.Map as Map
 import Happstack.Server
 
 import Files
@@ -25,8 +26,9 @@ index = msum
 
 startPage :: UpMonad m => SessionID -> m Response
 startPage _sid = do
-  files <- mostRecentFileDescriptions 0 50
-  ok $ toResponse $ Html.index files
+  files    <- mostRecentFileDescriptions 0 50
+  partials <- partialFiles
+  ok $ toResponse $ Html.index files (Map.toList partials)
 
 --
 -- Login

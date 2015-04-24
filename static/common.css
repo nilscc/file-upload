@@ -49,3 +49,28 @@ button:hover {
   background-color: rgba(255,255,255,0.15);
   transition: background-color 0.2s;
 }
+
+@-webkit-keyframes fading {
+  from  { opacity: 1; }
+  to    { opacity: 0.4;  }
+}
+@keyframes fading {
+  from  { opacity: 1; }
+  to    { opacity: 0.4;  }
+}
+
+.fading {
+  -webkit-animation: fading 1.3s ease-in-out infinite alternate;
+          animation: fading 1.3s ease-in-out infinite alternate;
+}
+
+/* Font awesome correctiosn */
+
+.fa-spin {
+  -webkit-filter: blur(1);
+}
+
+.fa-circle-o-notch {
+  padding: 1px;
+  margin: -1px;
+}

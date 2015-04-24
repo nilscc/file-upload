@@ -30,19 +30,29 @@ index' hdr inner = H.docTypeHtml $ do
 
     inner
 
-index :: [(FileID, FileDescription)] -> Html
-index desc = index' hdrs $ do
+index
+  :: [(FileID, FileDescription)]
+  -> [(PartialFileStatus, FileDescription)]
+  -> Html
+index desc partials = index' hdrs $ do
 
   H.div ! A.class_ "fileupload" $ do
     H.h1 "Upload"
-    H.p "Drop files to upload."
+    if null partials then
+      H.p "Drop files to upload."
+     else do
+      H.div ! A.class_ "uploadlist" $ do
+        H.ul $ do
+          mapM_ (uncurry (partialFileDescription' H.li)) partials
+        H.button ! A.class_ "upload-all" $ do
+          H.i ! A.class_ "fa fa-upload" $ return ()
+          " Upload"
 
   H.ul ! A.class_ "filelist" $ do
     mapM_ (H.li . uncurry fileDescription) desc
 
  where
-  hdrs = [ js  "static/lib/cryptojs-md5.js"
-         , js  "static/fileupload.js"
+  hdrs = [ js  "static/fileupload.js"
          , css "static/fileupload.css"
          , js  "static/filelist.js"
          , css "static/filelist.css"

@@ -2,12 +2,21 @@
   margin: 5em auto;
   padding: 5em 0 5em;
   text-align: center;
-  max-width: 800px;
-  max-width: max(80%, 800px);
   color: rgba(255,255,255,0.3);
   border: 2pt dashed rgba(255,255,255,0.2);
   transition: border-color 0.8s, color 0.8s;
   border-radius: 10pt;
+}
+
+@media all and (min-width: 1000px) {
+  .fileupload {
+    max-width: 80%;
+  }
+}
+@media all and (max-width: 1000px) {
+  .fileupload {
+    max-width: 800px;
+  }
 }
 
 .fileupload h1,
@@ -49,13 +58,19 @@
   position: relative;
 }
 
-.fileupload .uploadlist li > * {
+.fileupload .uploadlist li > .remove,
+.fileupload .uploadlist .main-container .filename {
   margin-right: 0.5em;
 }
 
 .fileupload .uploadlist .filename {
+  display: inline-block;
   color: rgba(255,255,255,0.8);
   padding: 0 0.5em 0;
+}
+
+.fileupload .uploadlist .filesize {
+  display: inline-block;
 }
 .fileupload .uploadlist .filesize::before { content: "("; }
 .fileupload .uploadlist .filesize::after { content: ")"; }
@@ -95,4 +110,48 @@
   border: 0;
   border-radius: 2pt;
   z-index: -1;
+}
+
+.fileupload .uploadlist .main-container {
+  display: inline-block;
+  vertical-align: top;
+  width: calc(100% - 2em);
+}
+
+/* Upload status */
+
+.fileupload .uploadlist .upload-status {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.8em;
+}
+
+.fileupload .uploadlist .main-container .upload-status > div {
+  display: inline-block;
+  vertical-align: top;
+  max-width: calc(100% - 2.125em);
+}
+
+.fileupload .uploadlist .upload-status .fa {
+  padding: 0 0.5em 0 0.625em;
+  max-width: 1em;
+}
+
+.fileupload .uploadlist .partial-upload .upload-status .new,
+.fileupload .uploadlist .partial-upload .upload-status .replace {
+  text-decoration: underline;
+}
+
+/* Icon colors */
+
+.fileupload .uploadlist .upload-status .fa.fa-check {
+  color: rgba(0,204,0,0.7);
+}
+.fileupload .uploadlist .upload-status .fa.fa-upload,
+.fileupload .uploadlist .upload-status .fa.fa-circle-o-notch,
+.fileupload .uploadlist .upload-status .fa.fa-repeat {
+  color: rgba(0, 153, 204, 0.9);
+}
+.fileupload .uploadlist .upload-status .fa.fa-exclamation {
+  color: rgba(204,0,0,0.7);
+  font-size: 1.1em;
 }

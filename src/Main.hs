@@ -20,7 +20,7 @@ import Sessions
 import Types
 import qualified Page.Files as Page (files)
 import qualified Page.Index as Page (index)
-import qualified Page.Upload as Page (upload)
+import qualified Page.Upload as Page (upload, resumeUpload)
 import qualified Page.Error as Page (notFound)
 
 main :: IO ()
@@ -48,7 +48,7 @@ main = do
   fst <- localFiles
 
   -- combine states
-  let states = AcidStates fst sst
+  let states = States fst sst
 
   let webserv = simpleHTTP conf $ runReaderT (evalStateT mainRoute gen') states
 
@@ -68,7 +68,7 @@ mainRoute = do
   -- main route
   msum
     [ nullDir >> Page.index
-    , dir "upload" $ method [POST] >> Page.upload
+    , dir "upload" $ method [POST] >> msum [Page.resumeUpload, Page.upload]
     , dir "files"  $ path Page.files
     , dir "static" $ serveDirectory DisableBrowsing [] "static"
     , Page.notFound

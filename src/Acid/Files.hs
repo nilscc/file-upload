@@ -22,19 +22,34 @@ import Data.Text (Text)
 
 type FileID = BS.ByteString
 
+type FileSize = Integer
+
+-- | Checksum as hex string
+type Checksum = String
+
 data FileDescription = FileDescription
   { fileName        :: Text
-  , fileSize        :: Integer
+  , fileSize        :: FileSize
+  , fileChecksum    :: Checksum
   , fileContentType :: String
   , fileLocation    :: FilePath
   , fileCreatedAt   :: UTCTime
   }
-  deriving (Show, Typeable)
+  deriving (Show, Typeable, Eq, Ord)
 
 deriveSafeCopy 0 'base ''FileDescription
 
+data PartialFileStatus = PartialFileStatus
+  { partialFileSize     :: FileSize
+  , partialFileChecksum :: Checksum
+  }
+  deriving (Show, Typeable, Eq, Ord)
+
+deriveSafeCopy 0 'base ''PartialFileStatus
+
 data Files = Files
-  { files :: Map FileID FileDescription
+  { files        :: Map FileID FileDescription
+  , partialFiles :: Map PartialFileStatus FileDescription
   }
   deriving (Show, Typeable)
 
@@ -83,6 +98,25 @@ mostRecentFileDescriptions off lim =
 removeFileDescription :: FileID -> Update Files ()
 removeFileDescription fid = modify $ \f -> f { files = Map.delete fid (files f) }
 
+--------------------------------------------------------------------------------
+-- Partial files
+--
+
+addPartialFile :: FileDescription -> PartialFileStatus -> Update Files ()
+addPartialFile fd pfs =
+  modify $ \f -> f { partialFiles = Map.insert pfs fd (partialFiles f) }
+
+getPartialFiles :: Query Files (Map PartialFileStatus FileDescription)
+getPartialFiles = asks partialFiles
+
+findPartialFileDescription :: PartialFileStatus -> Query Files (Maybe FileDescription)
+findPartialFileDescription pfs = do
+  asks $ Map.lookup pfs . partialFiles
+
+removePartialFileDescription :: PartialFileStatus -> Update Files ()
+removePartialFileDescription pfs = do
+  modify $ \f -> f { partialFiles = Map.delete pfs (partialFiles f) }
+
 makeAcidic ''Files
   [ 'uniqueFileID
   , 'addFileDescription
@@ -91,4 +125,8 @@ makeAcidic ''Files
   , 'lookupFileDescriptions
   , 'mostRecentFileDescriptions
   , 'removeFileDescription
+  , 'addPartialFile
+  , 'getPartialFiles
+  , 'findPartialFileDescription
+  , 'removePartialFileDescription
   ]
