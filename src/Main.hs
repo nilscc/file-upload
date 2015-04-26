@@ -4,6 +4,7 @@
 module Main where
 
 import Crypto.Random
+import Control.Applicative
 import Control.Monad
 import Control.Monad.State
 import Control.Monad.Reader
@@ -39,23 +40,28 @@ main = do
   putStrLn $ "Session key: " ++ takeWhile ('=' /=) (B8.unpack (Base32.encode key))
   putStrLn "--------------------------------------------------------------------------------\n"
 
-  -- HTTP configuration
-  let conf = nullConf { port = 8085 }
-
-  putStrLn $ "Starting server on port " ++ show (port conf)
-
   -- open file state
   fst <- localFiles
 
   -- combine states
   let states = States fst sst
 
-  let webserv = simpleHTTP conf $ runReaderT (evalStateT mainRoute gen') states
+  -- HTTP configuration
+  let conf = nullConf { port = 8085 }
+
+  let runMain = runReaderT (evalStateT mainRoute gen') states
+      unauth  = unauthorized (toResponse "No access.")
+
+  let webserv = simpleHTTP conf $ runMain <|> unauth
+
+  putStrLn $ "Starting server on port " ++ show (port conf)
 
   webserv `finally` createCheckpoint sst
 
 mainRoute :: UpMonad m => m Response
 mainRoute = do
+
+  guard . ("127.0.0.1" ==) . fst . rqPeer =<< askRq
 
   tmp_dir <- liftIO getTemporaryDirectory
 
