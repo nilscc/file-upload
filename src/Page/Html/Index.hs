@@ -18,7 +18,7 @@ index' hdr inner = H.docTypeHtml $ do
     css "static/css/font-awesome.min.css"
 
     -- google font
-    css "http://fonts.googleapis.com/css?family=Martel+Sans"
+    css "https://fonts.googleapis.com/css?family=Martel+Sans"
 
     -- jquery
     js  "static/lib/jquery-2.1.3.min.js"

@@ -18,6 +18,7 @@ cabal-version:       >=1.10
 
 executable file-upload-server
   main-is:             Main.hs
+  ghc-options:         -O2 -threaded
   -- other-modules:       
   -- other-extensions:    
   hs-source-dirs:      src
@@ -26,7 +27,7 @@ executable file-upload-server
                        mtl, containers, time >= 1.5,
                        bytestring, base32-bytestring, text,
                        directory,
-                       crypto-random,
+                       crypto-random, cryptohash,
                        safecopy, acid-state,
                        HTTP, happstack-server,
                        blaze-html
