@@ -48,15 +48,11 @@ performLogin = do
   case Base32.decode $ BL.toStrict inp of
 
     -- parse/decode error
-    Left err -> do
-      liftIO $ putStrLn $ "Invalid login: " ++ show inp ++ " (" ++ err ++ ")"
-      mzero
+    Left err -> mzero
 
     Right skey -> do
       -- try to create new session
       res <- newSession skey
       case res of
         Just sid -> startPage sid
-        Nothing  -> do
-          liftIO $ putStrLn $ "Failed login: " ++ show inp
-          mzero
+        Nothing  -> mzero
