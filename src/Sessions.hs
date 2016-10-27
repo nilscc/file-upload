@@ -38,13 +38,18 @@ getSessionIdCookie = do
   return $ if null val then Nothing else Just (B8.pack val)
 
 requireSession
-  :: (MonadPlus m, Monad m, HasRqData m, Functor m)
+  :: UpMonad m
   => (SessionID -> m a)
   -> m a
 requireSession go = do
   res <- getSessionIdCookie
   case res of
-    Just sid -> go sid
+    Just sid -> do
+      -- verify session cookie vs state sessions
+      st <- asks sessionState
+      guard =<< query' st (Acid.ValidSession sid)
+      -- run function
+      go sid
     Nothing  -> mzero
 
 setSessionIdCookie :: (MonadIO m, FilterMonad Response m) => Acid.SessionID -> m ()
