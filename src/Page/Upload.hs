@@ -115,13 +115,18 @@ upload = dir "file" $ do
                            , fileCreatedAt = now
                            }
 
+  acceptUpload fd tmp
+
+acceptUpload :: UpMonad m => FileDescription -> FilePath -> m Response
+acceptUpload fd tmp = do
+
   tmp_h       <- liftIO $ openFile tmp ReadMode
   -- actual uploaded file size
   actualsize  <- liftIO $ hFileSize tmp_h
   -- actual uploaded file checksum
   actualchksm <- md5 <$> liftIO (BL.hGetContents tmp_h)
 
-  if actualsize < fsize then do
+  if actualsize < fileSize fd then do
 
     -- partial file upload
     let pfs = PartialFileStatus actualsize actualchksm
@@ -129,7 +134,7 @@ upload = dir "file" $ do
     -- create PARTIAL CONTENT response
     resp partialContent . toResponse $ partialFileDescription pfs fd'
 
-   else if fchksm /= actualchksm then do
+   else if actualchksm /= fileChecksum fd then do
 
     -- checksum mismatch: create CONFLICT response
     resp conflict . toResponse $ actualchksm
