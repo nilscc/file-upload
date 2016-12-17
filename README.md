@@ -8,7 +8,7 @@ Implemented features:
 * Secure login with randomized master key
 * Drag & drop file upload UI
 * Client-side and server-side file hashing before upload to guarantee
-	correctness of upload
+  correctness of upload
 * Support for partial file uploads and resumable uploads of large files
 * Anonymous download URLs with randomized file IDs
 * Preservation of original file names (including all UTF-8 characters)
@@ -23,7 +23,7 @@ Planned features:
 Issues:
 
 * Please use the [issue tracker](https://github.com/nilscc/file-upload/issues)
-	on GitHub for all bug reports.
+  on GitHub for all bug reports.
 
 Requirements
 ---
@@ -74,21 +74,21 @@ block of your Nginx configuration:
 server {
   server_name           <sub>.<domain>.<tld>;
 
-	# only accept encrypted connections
+  # only accept encrypted connections
   listen                443 ssl;
   ssl_certificate       /usr/local/etc/letsencrypt/live/<sub>.<domain>.<tld>/fullchain.pem;
   ssl_certificate_key   /usr/local/etc/letsencrypt/live/<sub>.<domain>.<tld>/privkey.pem;
 
   location / {
 
-		# pass all data to backend
+    # pass all data to backend
     proxy_pass                  http://127.0.0.1:8085;
 
-		# disable all request buffering.
-		# this is required for partial uploads to function properly.
+    # disable all request buffering.
+    # this is required for partial uploads to function properly.
     proxy_request_buffering     off;
 
-		# max file size - adjust as necessary
+    # max file size - adjust as necessary
     client_max_body_size        1G;
   }
 }
