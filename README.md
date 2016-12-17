@@ -62,6 +62,13 @@ cabal install
 ./.cabal-sandbox/bin/file-upload-server
 ```
 
+By default it will run on port 8085 and only be accessible from your local
+host:
+
+```
+http://127.0.0.1:8085
+```
+
 Integrating with Other Web Servers
 ---
 
